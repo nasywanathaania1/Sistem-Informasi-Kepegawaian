@@ -1,0 +1,5 @@
+.bg-home {
+    /* Dim The Background to 50% Brightness */
+    background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.pexels.com/photos/380769/pexels-photo-380769.jpeg?cs=srgb&dl=pexels-marc-mueller-380769.jpg&fm=jpg&h=1080&w=1920&fit=crop");
+    background-size: cover;
+}
