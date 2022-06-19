@@ -1,3 +1,15 @@
+<?php
+
+ob_start();
+
+session_start();
+
+if(isset($_SESSION['role'])){
+    header("location: ./page/home.php");
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
