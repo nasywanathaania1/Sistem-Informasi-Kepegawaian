@@ -1,38 +1,31 @@
 <?php
 
+session_start();
+
 ob_start();
 
 include "./connection.php";
 
 if(isset($_POST['submit'])){
-    $nik = mysqli_real_escape_string($conn, trim($_POST['nik']));
-    $nama = mysqli_real_escape_string($conn, trim($_POST['nama']));
-    $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat']));
+    $user = $_SESSION['username'];
+    $nik = trim($_POST['nik']);
+    $nama = trim($_POST['nama']);
+    $alamat = trim($_POST['alamat']);
     $posisi = $_POST['posisi'];
-    $tahun = date $_POST['tahun-lulus'];
+    $tahun = trim($_POST['tahun-lulus']);
+    $pendidikan = $_POST['pendidikan-terakhir'];
 
     // Check If Empty
-    if($user == "" || $pass == "" || $pass_re == ""){
+    if($nik == "" || $nama == "" || $alamat == "" || $tahun == ""){
         echo "<script>window.alert(\"Field Tidak Boleh Kosong\");</script>";
     }else{
-        // Check If Password and Password-Re are different
-        if($pass != $pass_re){
-            echo "<script>window.alert(\"Password Harus Sama\");</script>";
+        if(!mysqli_query($conn, "UPDATE `calon_pegawai` SET `nik`='$nik',`nama`='$nama',`alamat`='$alamat',`posisi_yang_dilamar`='$posisi',`tahun_lulus`='$tahun',`pendidikan_terakhir`='$pendidikan' WHERE `username`='$user';")){
+            echo "<script>window.alert(\"Update Gagal\");</script>";
         }else{
-            // Check If Username Exist
-            if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `akun` WHERE `username`='$user';")) != 0){
-                echo "<script>window.alert(\"Username Sudah Ada\");</script>";
-            }else{
-                $pass = password_hash($pass, PASSWORD_DEFAULT);
-                if(!mysqli_query($conn, "INSERT INTO `akun` VALUES ('$user', '$pass', 'calon');")){
-                    echo "<script>window.alert(\"Register Gagal\");</script>";
-                }else{
-                    echo "<script>window.alert(\"Register Sukses\");</script>";
-                }
-            }
+            echo "<script>window.alert(\"Update Sukses\");</script>";
         }
     }
 
-    header("refresh:0;url=../index.php");
+    header("refresh:0;url=./home.php");
     // var_dump(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `akun` WHERE `username`='$user';")));
 }

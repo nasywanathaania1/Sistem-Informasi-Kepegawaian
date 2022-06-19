@@ -8,15 +8,15 @@ if(isset($_POST['submit'])){
     $user = mysqli_real_escape_string($conn, str_replace(' ','',$_POST['username']));
     $pass = mysqli_real_escape_string($conn, str_replace(' ','',$_POST['password']));
     $pass_re = mysqli_real_escape_string($conn, str_replace(' ','',$_POST['password-re']));
-    $nik = mysqli_real_escape_string($conn, trim($_POST['nik']));
-    $nama = mysqli_real_escape_string($conn, trim($_POST['nama']));
-    $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat']));
+    $nik = trim($_POST['nik']);
+    $nama = trim($_POST['nama']);
+    $alamat = trim($_POST['alamat']);
     $posisi = $_POST['posisi'];
     $tahun = trim($_POST['tahun-lulus']);
     $pendidikan = $_POST['pendidikan-terakhir'];
 
     // Check If Empty
-    if($user == "" || $pass == "" || $pass_re == "" || $nik == "" || $nama = "" || $alamat == "" || $tahun == ""){
+    if($user == "" || $pass == "" || $pass_re == "" || $nik == "" || $nama == "" || $alamat == "" || $tahun == ""){
         echo "<script>window.alert(\"Field Tidak Boleh Kosong\");</script>";
     }else{
         // Check If Password and Password-Re are different
@@ -31,7 +31,13 @@ if(isset($_POST['submit'])){
                 if(!mysqli_query($conn, "INSERT INTO `akun` VALUES ('$user', '$pass', 'calon');")){
                     echo "<script>window.alert(\"Register Gagal\");</script>";
                 }else{
-                    echo "<script>window.alert(\"Register Sukses\");</script>";
+                    if(!mysqli_query($conn, "INSERT INTO `calon_pegawai`(`nik`, `nama`, `alamat`, `posisi_yang_dilamar`, `tahun_lulus`, `pendidikan_terakhir`, `username`) VALUES ('$nik', '$nama', '$alamat', '$posisi', '$tahun', '$pendidikan', '$user');")){
+                        mysqli_query($conn, "DELETE FROM `akun` WHERE username='$user';");
+                        echo "<script>window.alert(\"Register Gagal\");</script>";
+                    }else{
+                        echo "<script>window.alert(\"Register Sukses\");</script>";
+                    }
+                    // var_dump("INSERT INTO `calon_pegawai`(`nik`, `nama`, `alamat`, `posisi_yang_dilamar`, `tahun_lulus`, `pendidikan_terakhir`, `username`) VALUES ('$nik', '$nama', '$alamat', '$posisi', '$tahun', '$pendidikan', '$user');");
                 }
             }
         }
